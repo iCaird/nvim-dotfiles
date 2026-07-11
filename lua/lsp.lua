@@ -5,6 +5,15 @@ vim.lsp.log.set_level("off")
 --   cmd = { "lua-language-server" },
 --   filetypes = { "lua" },
 -- })
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { "vim" },
+			},
+		},
+	},
+})
 vim.lsp.enable("lua_ls")
 -- vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 -- vim.api.nvim_create_autocmd("LspAttach", {
@@ -13,17 +22,18 @@ vim.lsp.enable("lua_ls")
 --   end,
 -- })
 --
---
+vim.lsp.config("*", {
+	capabilities = require("blink.cmp").get_lsp_capabilities(),
+})
 --
 --
 -- vim.lsp.config('ts_ls', {
 --   cmd = { 'typescript-language-server', '--stdio'},
 --   filetypes = { "javascript", "typescript" }
 -- })
-vim.lsp.enable("julia-lsp")
-vim.lsp.config("julia-lsp", {})
+vim.lsp.enable("julials")
+vim.lsp.config("julials", {})
 vim.lsp.enable("ts_ls")
-vim.lsp.enable("texlab")
 vim.lsp.config("texlab", {
 	settings = {
 
@@ -38,6 +48,7 @@ vim.lsp.config("texlab", {
 	},
 })
 
+vim.lsp.enable("texlab")
 vim.lsp.config.bashls = {
 	cmd = { "bash-language-server", "start" },
 	filetypes = { "bash", "sh" },
@@ -50,9 +61,7 @@ vim.lsp.enable("bashls")
 --   cmd = {'pyright'},
 --   filetypes = { 'python', 'sage'}
 -- }
-vim.lsp.config("*", {
-	capabilities = vim.lsp.protocol.make_client_capabilities(),
-})
+
 require("mason").setup()
 -- require("mason-lspconfig").setup({
 -- 	ensure_installed = { "pyright" },

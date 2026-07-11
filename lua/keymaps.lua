@@ -1,4 +1,3 @@
----@diagnostic disable: undefined-global
 
 -- TELESCOPE
 local builtin = require("telescope.builtin")
@@ -20,42 +19,42 @@ end, { noremap = true, silent = true })
 -- vim.keymap.set({"i"}, "<S-Tab>", function() ls.jump(-1) end, { silent = true})
 --
 --
--- KNAP KEYBINDS
 
-vim.keymap.set({ "n", "v", "i" }, "<F5>", function()
-	require("knap").process_once()
-end)
-vim.keymap.set({ "n", "v", "i" }, "<F6>", function()
-	require("knap").close_viewer()
-end)
-vim.keymap.set({ "n", "v", "i" }, "<F7>", function()
-	require("knap").toggle_autopreviewing()
-end)
-vim.keymap.set({ "n", "v", "i" }, "<F8>", function()
-	require("knap").forward_jump()
-end)
 
 -- AUTOSAVE
 local function toggle_auto_save()
 	local buf = vim.api.nvim_get_current_buf()
-	local auto_save_key = "auto_save_" .. buf
-	local is_enabled = vim.g[auto_save_key] or false
+	local enabled = vim.b.auto_save
 
-	if is_enabled then
-		vim.cmd("augroup AutoSave_" .. buf .. " | autocmd! | augroup END")
-		vim.notify("Auto-save OFF", vim.log.levels.WARN, { timeout = 1500 })
-		vim.g[auto_save_key] = false
+	if enabled then
+		vim.api.nvim_clear_autocmds({
+			group = "AutoSave",
+			buffer = buf,
+		})
+
+		vim.b.auto_save = false
 	else
-		vim.opt.updatetime = 500
-		vim.cmd([[
-    augroup AutoSave_]] .. buf .. [[
-    autocmd! 
-    autocmd CursorHold,CursorHoldI <buffer> if &modified | silent! write | endif
-    augroup END
-    ]])
-		vim.notify("Auto-save ON", vim.log.levels.INFO, { timeout = 1500 })
-		vim.g[auto_save_key] = true
+		local group = vim.api.nvim_create_augroup(
+			"AutoSave",
+			{ clear = false }
+		)
+
+		vim.api.nvim_create_autocmd(
+			{ "CursorHold", "CursorHoldI" },
+			{
+				group = group,
+				buffer = buf,
+				callback = function()
+					if vim.bo.modified then
+						vim.cmd.write()
+					end
+				end,
+			}
+		)
+
+		vim.b.auto_save = true
 	end
+  vim.notify("Auto-save: " .. tostring(vim.b.auto_save))
 end
 vim.keymap.set("n", "<leader>as", toggle_auto_save, { desc = "Toggle auto-save (current buffer)" })
 
@@ -104,3 +103,5 @@ end, { desc = "Format buffer" })
 vim.keymap.set("n", "<leader>qp", function()
 	require("quarto").quartoPreview()
 end)
+
+

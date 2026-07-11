@@ -25,3 +25,4 @@ vim.opt.colorcolumn = { 100 }
 vim.o.shell = "/bin/bash"
 
 vim.opt.cursorline = true
+

@@ -153,6 +153,9 @@ return {
 		lazy = false,
 		init = function()
 			vim.g.vimtex_syntax_conceal_disable = 1
+      vim.g.vimtex_syntax_enabled = 0
+      vim.g.vimtex_imaps_enabled = 0
+      vim.g.vimtex_indent_enabled = 0
 			vim.g.vimtex_view_method = "zathura"
 			vim.g.vimtex_compiler_latexmk = {
 				aux_dir = "./aux",
@@ -206,13 +209,16 @@ return {
 	--   end,
 	-- },
 
-	-- {
-	-- 	"L3MON4D3/LuaSnip",
-	-- 	-- follow latest release.
-	-- 	version = "v2.*",
-	-- 	build = "make install_jsregexp",
-	-- 	dependencies = { "rafamadriz/friendly-snippets" },
-	-- },
+	{
+		"L3MON4D3/LuaSnip",
+		-- follow latest release.
+		version = "v2.*",
+		build = "make install_jsregexp",
+		dependencies = { "rafamadriz/friendly-snippets" },
+		config = function()
+			require("luasnip.loaders.from_vscode").lazy_load()
+		end,
+	},
 
 	-- {
 	--   'hrsh7th/nvim-cmp',
@@ -263,7 +269,22 @@ return {
 	{
 		"saghen/blink.cmp",
 		version = "1.*",
+		dependencies = {
+			"L3MON4D3/LuaSnip",
+		},
+
 		opts = {
+			sources = {
+				default = {
+					"lsp",
+					"path",
+					"snippets",
+					"buffer",
+				},
+			},
+			snippets = {
+				preset = "luasnip",
+			},
 			keymap = {
 				preset = "default",
 				["<S-CR>"] = { "accept", "fallback" },
@@ -280,9 +301,9 @@ return {
 		},
 	},
 
-	{
-		"gelguy/wilder.nvim",
-	},
+	-- {
+	-- "gelguy/wilder.nvim",
+	-- },
 
 	{
 
@@ -489,16 +510,16 @@ return {
 			end
 		end,
 	},
-	{
-		"SirVer/ultisnips",
-		init = function()
-			vim.g.UltiSnipsExpandTrigger = "<C-l>"
-			vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
-			vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
-			vim.g.UltiSnipsRemoveSelectModeMappings = 0
-		end,
-		dependencies = { "honza/vim-snippets" },
-	},
+	-- {
+	-- 	"SirVer/ultisnips",
+	-- 	init = function()
+	-- 		vim.g.UltiSnipsExpandTrigger = "<C-l>"
+	-- 		vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
+	-- 		vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
+	-- 		vim.g.UltiSnipsRemoveSelectModeMappings = 0
+	-- 	end,
+	-- 	dependencies = { "honza/vim-snippets" },
+	-- },
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		config = function()
@@ -509,4 +530,22 @@ return {
 			})
 		end,
 	},
+
+	{
+		"folke/lazydev.nvim",
+		ft = "lua",
+		opts = {},
+	},
+
+	-- {
+	-- 	"iurimateus/luasnip-latex-snippets.nvim",
+	-- 	dependencies = {
+	-- 		"L3MON4D3/LuaSnip",
+	-- 		"lervag/vimtex",
+	-- 	},
+	-- 	ft = "tex",
+	-- 	config = function()
+	-- 		require("luasnip-latex-snippets").setup()
+	-- 	end,
+	-- },
 }

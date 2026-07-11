@@ -29,11 +29,13 @@ vim.filetype.add({
 	},
 })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-	pattern = "*.tex",
-	callback = function()
-		vim.opt_local.spell = true
-	end,
-})
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+-- 	pattern = "*.tex",
+-- 	callback = function()
+-- 		vim.opt_local.spell = true
+-- 	end,
+-- })
 
 vim.g.UltiSnipsEnableAutoTrigger = 1
+vim.opt.clipboard:append('unnamedplus')
+
