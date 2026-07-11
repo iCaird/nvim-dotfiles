@@ -1,6 +1,5 @@
 ---@diagnostic disable: undefined-global
 
-
 -- TELESCOPE
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
@@ -14,7 +13,7 @@ vim.keymap.set("n", "<leader><CR>", function()
 	vim.cmd("RunInKitty")
 end, { noremap = true, silent = true })
 
-local ls = require("luasnip")
+-- local ls = require("luasnip")
 
 -- vim.keymap.set({"i"}, "<Tab>", function() ls.expand_or_jumpable() end, { silent = true})
 -- vim.keymap.set({"i"}, "<Tab>", function() ls.jump(1) end, { silent = true})
@@ -36,7 +35,6 @@ vim.keymap.set({ "n", "v", "i" }, "<F8>", function()
 	require("knap").forward_jump()
 end)
 
-
 -- AUTOSAVE
 local function toggle_auto_save()
 	local buf = vim.api.nvim_get_current_buf()
@@ -44,7 +42,7 @@ local function toggle_auto_save()
 	local is_enabled = vim.g[auto_save_key] or false
 
 	if is_enabled then
-		vim.cmd("augroup Autosave_" .. buf .. " | autocmd! | augroup END")
+		vim.cmd("augroup AutoSave_" .. buf .. " | autocmd! | augroup END")
 		vim.notify("Auto-save OFF", vim.log.levels.WARN, { timeout = 1500 })
 		vim.g[auto_save_key] = false
 	else
@@ -61,7 +59,6 @@ local function toggle_auto_save()
 end
 vim.keymap.set("n", "<leader>as", toggle_auto_save, { desc = "Toggle auto-save (current buffer)" })
 
-
 -- RUN FILE IN KITTY WINDOW
 vim.api.nvim_create_user_command("RunInKitty", function()
 	local file = vim.fn.expand("%:p")
@@ -74,6 +71,8 @@ vim.api.nvim_create_user_command("RunInKitty", function()
 		cmd = 'include("' .. file .. '")\\n main()'
 	elseif ext == "py" then
 		cmd = "python " .. file
+	elseif ext == "js" then
+		cmd = "node " .. file
 	end
 	vim.notify(ext)
 
@@ -93,7 +92,6 @@ vim.api.nvim_create_user_command("RunInKitty", function()
 		send()
 	end
 end, {})
-
 
 -- CONFORM (AUTOFORMATTER)
 

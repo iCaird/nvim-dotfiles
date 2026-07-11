@@ -6,14 +6,21 @@ return {
 		priority = 1000,
 		config = function()
 			vim.cmd.colorscheme("synthweave")
+			vim.api.nvim_set_hl(0, "@custom.red", { bg = "#a04040" })
+			vim.api.nvim_set_hl(0, "@custom.comment", { bg = "#4040a0" })
+			vim.api.nvim_set_hl(0, "@custom.suggest", { bg = "#3f6f4a" })
+			vim.api.nvim_set_hl(0, "@custom.previous", { bg = "#a85a30" })
 		end,
 	},
 
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
+		---@module "ibl"
+		---@type ibl.config
 		opts = {},
 	},
+
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
@@ -26,6 +33,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
@@ -38,6 +46,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"akinsho/bufferline.nvim",
 		dependencies = "nvim-tree/nvim-web-devicons",
@@ -49,6 +58,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -63,6 +73,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.8",
@@ -87,6 +98,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
@@ -103,17 +115,21 @@ return {
 			},
 		},
 	},
+
 	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
 		opts = {},
-		init = function()
+		config = function()
 			local Rule = require("nvim-autopairs.rule")
 			local npairs = require("nvim-autopairs")
+			npairs.setup({})
 			npairs.add_rule(Rule("\\(", "\\)", "tex"))
 			npairs.add_rule(Rule("\\[", "\\]", "tex"))
+			npairs.add_rule(Rule("\\{", "\\}", "tex"))
 		end,
 	},
+
 	{
 		"kdheepak/lazygit.nvim",
 		lazy = true,
@@ -131,10 +147,12 @@ return {
 			{ "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
 		},
 	},
+
 	{
 		"lervag/vimtex",
 		lazy = false,
 		init = function()
+			vim.g.vimtex_syntax_conceal_disable = 1
 			vim.g.vimtex_view_method = "zathura"
 			vim.g.vimtex_compiler_latexmk = {
 				aux_dir = "./aux",
@@ -148,10 +166,12 @@ return {
 					"-file-line-error",
 					"-synctex=1",
 					"-interaction=nonstopmode",
+					"-pdf",
 				},
 			}
 		end,
 	},
+
 	{
 		"abecodes/tabout.nvim",
 		lazy = false,
@@ -160,10 +180,12 @@ return {
 				tabout = {
 					{ open = "\\(", close = "\\)" },
 					{ open = "\\[", close = "\\]" },
+					{ open = "\\{", close = "\\}" },
 				},
 			})
 		end,
 	},
+
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		branch = "v3.x",
@@ -177,18 +199,21 @@ return {
 			require("neo-tree").setup({})
 		end,
 	},
+
 	-- {
 	--   'dense-analysis/ale',
 	--   config = function()
 	--   end,
-	-- }
-	{
-		"L3MON4D3/LuaSnip",
-		-- follow latest release.
-		version = "v2.*",
-		build = "make install_jsregexp",
-		dependencies = { "rafamadriz/friendly-snippets" },
-	},
+	-- },
+
+	-- {
+	-- 	"L3MON4D3/LuaSnip",
+	-- 	-- follow latest release.
+	-- 	version = "v2.*",
+	-- 	build = "make install_jsregexp",
+	-- 	dependencies = { "rafamadriz/friendly-snippets" },
+	-- },
+
 	-- {
 	--   'hrsh7th/nvim-cmp',
 	--   config = function()
@@ -209,10 +234,12 @@ return {
 	--     })
 	--   end,
 	-- },
+	--
 	-- {
 	--   'rafamadriz/friendly-snippets',
 	--   lazy = false;
 	-- },
+	--
 	-- {
 	--   'nvim-mini/mini.nvim',
 	--   version = '*',
@@ -223,27 +250,40 @@ return {
 	--     })
 	--   end,
 	-- },
+	--
 	-- {
 	--   'neovim/nvim-lspconfig'
-	-- }
+	-- },
+	--
 	{
 		"mason-org/mason.nvim",
 		opts = {},
 	},
+
 	{
 		"saghen/blink.cmp",
 		version = "1.*",
 		opts = {
 			keymap = {
-				preset = "enter",
-				["<Tab>"] = { "select_next", "fallback" },
-				["<S-Tab>"] = { "select_prev", "fallback" },
+				preset = "default",
+				["<S-CR>"] = { "accept", "fallback" },
+				["<A-Tab>"] = { "select_next", "fallback" },
+				["<A-S-Tab>"] = { "select_prev", "fallback" },
+			},
+			completion = {
+				list = {
+					selection = {
+						preselect = true,
+					},
+				},
 			},
 		},
 	},
+
 	{
 		"gelguy/wilder.nvim",
 	},
+
 	{
 
 		"OXY2DEV/markview.nvim",
@@ -253,50 +293,57 @@ return {
 	{
 		"frabjous/knap",
 	},
+
 	{
 		"mason-org/mason-lspconfig.nvim",
 	},
+
 	{
 		"RRethy/vim-illuminate",
 	},
+
 	{
 		"windwp/nvim-ts-autotag",
 		config = function()
 			require("nvim-ts-autotag").setup({})
 		end,
 	},
+
 	{
 		"nvzone/typr",
 		dependencies = "nvzone/volt",
 		opts = {},
 		cmd = { "Typr", "TyprStats" },
 	},
+
 	{
 		"folke/snacks.nvim",
 		opts = {
 			image = {
 				math = {
-					enabled = true,
+					enabled = false,
 					latex = {
 						font_size = "Large",
 						packages = { "amsmath", "amssymb", "amsfonts", "mathtools" },
 						tpl = [[
-        \documentclass[preview,border=0pt,varwidth,12pt]{standalone}
-        \usepackage{xcolor,amsmath,amssymb,amsfonts,mathtools,ecstyle}
-        \begin{document}
-        ${header}
-        { \${font_size} \selectfont
-          \color[HTML]{${color}}
-        ${content}}
-        \end{document}]],
+	       \documentclass[preview,border=0pt,varwidth,12pt]{standalone}
+	       \usepackage{xcolor,amsmath,amssymb,amsfonts,mathtools,ecstyle}
+	       \begin{document}
+	       ${header}
+	       { \${font_size} \selectfont
+	         \color[HTML]{${color}}
+	       ${content}}
+	       \end{document}]],
 					},
 				},
 			},
 		},
 	},
+
 	{
 		"chrisbra/unicode.vim",
 	},
+
 	{
 		"gruvw/strudel.nvim",
 		build = "npm ci",
@@ -304,6 +351,7 @@ return {
 			require("strudel").setup()
 		end,
 	},
+
 	{
 		"stevearc/conform.nvim",
 		opts = {},
@@ -321,6 +369,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"pwntester/octo.nvim",
 		cmd = "Octo",
@@ -367,6 +416,7 @@ return {
 			"nvim-tree/nvim-web-devicons",
 		},
 	},
+
 	{
 		"mcnangus/pr-comments.nvim",
 		config = function()
@@ -409,6 +459,7 @@ return {
 			},
 		},
 	},
+
 	{
 		"quarto-dev/quarto-nvim",
 		dependencies = {
@@ -416,23 +467,46 @@ return {
 			"nvim-treesitter/nvim-treesitter",
 		},
 	},
+
 	{
-		"tamton-aquib/duck.nvim",
+		"ThePrimeagen/harpoon",
+		branch = "harpoon2",
+		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
-			vim.keymap.set("n", "<leader>dd", function()
-				require("duck").hatch()
-			end, {})
-			vim.keymap.set("n", "<leader>dk", function()
-				require("duck").cook()
-			end, {})
-			vim.keymap.set("n", "<leader>da", function()
-				require("duck").cook_all()
-			end, {})
+			local harpoon = require("harpoon")
+			harpoon:setup({})
+
+			vim.keymap.set("n", "<leader>ha", function()
+				harpoon:list():add()
+			end)
+			vim.keymap.set("n", "<leader>he", function()
+				harpoon.ui:toggle_quick_menu(harpoon:list())
+			end)
+			for i = 1, 9 do
+				vim.keymap.set("n", "<leader>" .. i, function()
+					harpoon:list():select(i)
+				end)
+			end
 		end,
 	},
 	{
-		"eandrju/cellular-automaton.nvim",
+		"SirVer/ultisnips",
+		init = function()
+			vim.g.UltiSnipsExpandTrigger = "<C-l>"
+			vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
+			vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
+			vim.g.UltiSnipsRemoveSelectModeMappings = 0
+		end,
+		dependencies = { "honza/vim-snippets" },
 	},
-
-	{ "seandewar/killersheep.nvim" },
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		config = function()
+			require("treesitter-context").setup({
+				enable = true,
+				max_lines = 3,
+				trim_scope = "outer",
+			})
+		end,
+	},
 }

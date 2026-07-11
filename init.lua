@@ -1,14 +1,15 @@
 ---@diagnostic disable: undefined-global
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+
+vim.api.nvim_set_hl(0, "@custom.red", { fg = "#ff5555", bold = true })
 require("set")
 require("lazy-init")
 require("keymaps")
 require("lsp")
 require("autocmds")
-require("luasnip.loaders.from_vscode").lazy_load()
+
+-- require("luasnip.loaders.from_vscode").lazy_load()
 -- require('vim._core.ui2').enable({})
-vim.o.shell = "/bin/bash"
+
 vim.diagnostic.config({
 	virtual_text = {
 		prefix = "●", -- or "…"
@@ -34,3 +35,5 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		vim.opt_local.spell = true
 	end,
 })
+
+vim.g.UltiSnipsEnableAutoTrigger = 1

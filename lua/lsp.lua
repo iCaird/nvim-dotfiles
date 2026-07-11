@@ -23,10 +23,14 @@ vim.lsp.enable("lua_ls")
 vim.lsp.enable("julia-lsp")
 vim.lsp.config("julia-lsp", {})
 vim.lsp.enable("ts_ls")
--- vim.lsp.enable("texlab")
+vim.lsp.enable("texlab")
 vim.lsp.config("texlab", {
 	settings = {
+
 		texlab = {
+			diagnostics = {
+				ignoredPatterns = { "Unused" }, -- memory leak temp fix https://github.com/latex-lsp/texlab/issues/1551
+			},
 			chktex = {
 				onOpenAndSave = true,
 			},
@@ -50,6 +54,6 @@ vim.lsp.config("*", {
 	capabilities = vim.lsp.protocol.make_client_capabilities(),
 })
 require("mason").setup()
-require("mason-lspconfig").setup({
-	ensure_installed = { "pyright" },
-})
+-- require("mason-lspconfig").setup({
+-- 	ensure_installed = { "pyright" },
+-- })
