@@ -153,9 +153,9 @@ return {
 		lazy = false,
 		init = function()
 			vim.g.vimtex_syntax_conceal_disable = 1
-      vim.g.vimtex_syntax_enabled = 0
-      vim.g.vimtex_imaps_enabled = 0
-      vim.g.vimtex_indent_enabled = 0
+			vim.g.vimtex_syntax_enabled = 0
+			vim.g.vimtex_imaps_enabled = 1
+			vim.g.vimtex_indent_enabled = 0
 			vim.g.vimtex_view_method = "zathura"
 			vim.g.vimtex_compiler_latexmk = {
 				aux_dir = "./aux",
@@ -214,9 +214,17 @@ return {
 		-- follow latest release.
 		version = "v2.*",
 		build = "make install_jsregexp",
-		dependencies = { "rafamadriz/friendly-snippets" },
+		dependencies = {"evesdropper/luasnip-latex-snippets.nvim" },
 		config = function()
 			require("luasnip.loaders.from_vscode").lazy_load()
+			require("luasnip.loaders.from_lua").load({
+				paths = "~/.config/nvim/lua/snippets",
+			})
+			local ls = require("luasnip")
+			ls.setup({
+				enable_autosnippets = true,
+				update_events = {"TextChanged","TextChangedI"},
+			})
 		end,
 	},
 
@@ -274,6 +282,7 @@ return {
 		},
 
 		opts = {
+
 			sources = {
 				default = {
 					"lsp",
@@ -292,6 +301,13 @@ return {
 				["<A-S-Tab>"] = { "select_prev", "fallback" },
 			},
 			completion = {
+        menu = {
+          draw = {
+            columns = {
+              {"kind_icon"}, {"label"}, {"label_description", gap = 1}, {"source_name"}
+            }
+          }
+        },
 				list = {
 					selection = {
 						preselect = true,
@@ -537,15 +553,15 @@ return {
 		opts = {},
 	},
 
-	-- {
-	-- 	"iurimateus/luasnip-latex-snippets.nvim",
-	-- 	dependencies = {
-	-- 		"L3MON4D3/LuaSnip",
-	-- 		"lervag/vimtex",
-	-- 	},
-	-- 	ft = "tex",
-	-- 	config = function()
-	-- 		require("luasnip-latex-snippets").setup()
-	-- 	end,
-	-- },
+	{
+		"evesdropper/luasnip-latex-snippets.nvim",
+		dependencies = {
+			"L3MON4D3/LuaSnip",
+			"lervag/vimtex",
+		},
+		ft = "tex",
+		config = function()
+			require("luasnip-latex-snippets").setup()
+		end,
+	},
 }
