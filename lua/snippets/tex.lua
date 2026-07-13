@@ -47,28 +47,6 @@ end
 
 ls.add_snippets("tex", {
 	s(
-		{
-			trig = "pmat",
-			snippetType = "autosnippet",
-		},
-		fmta(
-			[[
-    \begin{pmatrix}
-      <> & <> \\
-      <> & <> \\
-    \end{pmatrix}
-    <>
-    ]],
-			{
-				i(1),
-				i(2),
-				i(3),
-				i(4),
-				i(5),
-			}
-		)
-	),
-	s(
 		{ trig = "env", snippetType = "autosnippet" },
 		fmta(
 			[[
@@ -85,6 +63,11 @@ ls.add_snippets("tex", {
 			}
 		)
 	),
+  s(
+    {trig = "\\lang", snippetType = "autosnippet"},
+    fmta([[\langle <> , <> \rangle <>]],{i(1), i(2), i(0)},
+    {condition = in_mathzone})
+  ),
 	-- postfix("hat", { l("\\hat{" .. l.POSTFIX_MATCH .. "}") }, { condition = math }), -- lambdas are basically function nodes but perform very simple tasks, e.g. string concatenation/modification
 	postfix({
 		trig = "hat",
@@ -98,6 +81,19 @@ ls.add_snippets("tex", {
 		snippetType = "autosnippet",
 		dscr = "postfix vec when in math mode",
 	}, { l("\\vec{" .. l.POSTFIX_MATCH .. "}") }, { condition = in_mathzone }),
+
+	postfix({
+		trig = "tilde",
+		match_pattern = [[[\\%w%.%_%-%"%']+$]],
+		snippetType = "autosnippet",
+		dscr = "postfix tilde when in math mode",
+	}, { l("\\tilde{" .. l.POSTFIX_MATCH .. "}") }, { condition = in_mathzone }),
+	postfix({
+		trig = "wtild",
+		match_pattern = [[[\\%w%.%_%-%"%']+$]],
+		snippetType = "autosnippet",
+		dscr = "postfix wide tilde when in math mode",
+	}, { l("\\widetilde{" .. l.POSTFIX_MATCH .. "}") }, { condition = in_mathzone }),
 	s(
 		"textbf",
 		f(function(args, snip)
@@ -108,7 +104,7 @@ ls.add_snippets("tex", {
 			return res
 		end, {})
 	),
-	s({ trig = ";a", snippetType = "autosnippet" }, { t("\\alpha") }),
+  s({trig = "\\frac", snippetType = "autosnippet"}, fmta([[\frac{<>}{<>} <>]],{i(1),i(2),i(3)}), {condition = in_mathzone})
 })
 
 local greek_letters = {
@@ -116,33 +112,33 @@ local greek_letters = {
 	{ "beta", "b" },
 	{ "gamma", "g" },
 	{ "delta", "d" },
-	{ "epsilon", "ep" },
-	{ "zeta", "" },
-	{ "eta", "" },
-	{ "theta", "" },
-	{ "iota", "" },
-	{ "kappa", "" },
-	{ "lambda", "" },
-	{ "mu", "" },
-	{ "nu", "" },
-	{ "xi", "" },
+	{ "epsilon", "e" },
+	{ "zeta", "z" },
+	{ "eta", "n" },
+	{ "theta", "h" },
+	{ "iota", "i" },
+	{ "kappa", "k" },
+	{ "lambda", "l" },
+	{ "mu", "m" },
+	{ "nu", "v" },
+	{ "xi", "x" },
 	{ "omicron", "" },
-	{ "pi", "" },
-	{ "rho", "" },
-	{ "sigma", "" },
-	{ "tau", "" },
-	{ "upsilon", "" },
-	{ "phi", "" },
-	{ "chi", "" },
-	{ "psi", "" },
-	{ "omega", "" },
+	{ "pi", "p" },
+	{ "rho", "r" },
+	{ "sigma", "s" },
+	{ "tau", "t" },
+	{ "upsilon", "u" },
+	{ "phi", "f" },
+	{ "chi", "c" },
+	{ "psi", "q" },
+	{ "omega", "o" },
 }
 
 local greek_snippets = {}
 
 for _, le in ipairs(greek_letters) do
 	if le[2] ~= "" then
-		local tbl = s({ trig = ";" .. le[2], snippetType = "autosnippet" }, t("\\" .. le[1]))
+		local tbl = s({ trig = ";" .. le[2], snippetType = "autosnippet" }, t("\\" .. le[1]), {condition = in_mathzone})
 		table.insert(greek_snippets, tbl)
 	end
 end
